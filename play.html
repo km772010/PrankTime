@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sound Button</title>
+<style>
+body {
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+button {
+    font-size: 40px;
+    padding: 30px 60px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+</style>
+</head>
+<body>
+
+<button onclick="playSound()">PLAY</button>
+
+<audio id="sound" src="https://www.youtube.com/watch?v=wNSec94klAY"></audio>
+
+<script>
+const audio = document.getElementById("sound");
+
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const ctx = new AudioContext();
+
+const source = ctx.createMediaElementSource(audio);
+const gainNode = ctx.createGain();
+
+// EXTREME VOLUME BOOST (1 = normal, 10 = insane, 50 = dangerous)
+gainNode.gain.value = 1;
+
+source.connect(gainNode);
+gainNode.connect(ctx.destination);
+
+function playSound() {
+    ctx.resume();
+    audio.currentTime = 0;
+    audio.play();
+}
+</script>
+
+</body>
+</html>
