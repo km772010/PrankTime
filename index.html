@@ -4,27 +4,21 @@
 <meta charset="UTF-8">
 <title>Sound Button</title>
 <style>
-body {
-    background: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+body{
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
 }
-
-button {
-    font-size: 40px;
-    padding: 30px 60px;
-    background: red;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-}
-
-button:active {
-    transform: scale(0.95);
+button{
+    font-size:50px;
+    padding:40px 80px;
+    background:red;
+    color:white;
+    border:none;
+    border-radius:20px;
+    cursor:pointer;
 }
 </style>
 </head>
@@ -32,32 +26,31 @@ button:active {
 
 <button onclick="playSound()">PLAY</button>
 
-<audio id="sound" src="sound.mp3"></audio>
-
 <script>
-const audio = document.getElementById("sound");
-
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const ctx = new AudioContext();
 
-const source = ctx.createMediaElementSource(audio);
 const gainNode = ctx.createGain();
+gainNode.gain.value = 5; // EXACTLY 5× louder
 
-// EXTREME VOLUME BOOST (1 = normal, 10 = insane, 50 = dangerous)
-gainNode.gain.value = 2;
-
-source.connect(gainNode);
 gainNode.connect(ctx.destination);
 
-function playSound() {
-    ctx.resume();
-    audio.currentTime = 0;
-    audio.play();
+async function playSound(){
+    await ctx.resume();
+
+    const response = await fetch("sound.mp3");
+    const buffer = await response.arrayBuffer();
+    const audioBuffer = await ctx.decodeAudioData(buffer);
+
+    const source = ctx.createBufferSource();
+    source.buffer = audioBuffer;
+
+    source.connect(gainNode);
+    source.start(0);
 }
 </script>
 
 </body>
 </html>
-
 
 
