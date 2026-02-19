@@ -44,7 +44,7 @@ const source = ctx.createMediaElementSource(audio);
 const gainNode = ctx.createGain();
 
 // EXTREME VOLUME BOOST (1 = normal, 10 = insane, 50 = dangerous)
-gainNode.gain.value = 1;
+gainNode.gain.value = 2;
 
 source.connect(gainNode);
 gainNode.connect(ctx.destination);
@@ -58,5 +58,6 @@ function playSound() {
 
 </body>
 </html>
+
 
 
